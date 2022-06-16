@@ -1,7 +1,7 @@
 Package: animalresp
 Type: Package
 Title: Animal respirometery functions
-Version: 1.0.0
+Version: 1.0.1
 Author: Kristen Oliver
 Maintainer: <kristenoliver@unm.edu>
 Description: This package was designed to provide helper functions and larger wrapper functions for extracting respirometry data of terestrial animals through measurements of CO2 and O2. 
