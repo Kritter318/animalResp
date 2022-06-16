@@ -97,7 +97,7 @@ find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",
   
   
   
-  i=103
+  #i=103
   
   if(noisy == FALSE){
     peaks<-data.frame("peak"=c(),"start"=c(),"end"=c(),"signal"=c())
