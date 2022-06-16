@@ -1,4 +1,9 @@
-
+# data=my_data
+# variable="Photocell"
+# lag=60
+# z_threshold = 8
+# noisy=FALSE
+# manual_bkgd="none"
 find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",noisy=FALSE){
   data<-as.numeric(get(variable,data))
   result<-data.frame("i"=c(seq(1:(lag))),"data"=data[1:(lag)],"signal"=c(rep(0,(lag))),"z"=c(rep(0,(lag))),"bkgd_pos"=c(rep(0,(lag))))
@@ -22,13 +27,13 @@ find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",
       if(sum(abs(result$signal[(i-(lag)):(i-1)]))==0){
         background<-summary(c(data[(i-lag):(i-1)]))
         background_pos<-paste((i-lag),":",i,sep="")
-        std<-sd(data[(i-lag):(i-1)])
+        std<-sd(data[(i-lag):(i-1)],na.rm=TRUE)
       }
     }else{
       background<-summary(c(data[manual_bkgd]))
       end_background<-length(manual_bkgd)
       background_pos<-paste((manual_bkgd[1]),":",manual_bkgd[end_background],sep="")
-      std<-sd(data[manual_bkgd])
+      std<-sd(data[manual_bkgd],na.rm = TRUE)
     }
     
     z<-((data[i]-as.numeric(paste(background[4])))/(std))
@@ -59,13 +64,13 @@ find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",
         if(sum(abs(result_2$signal[match((i+(lag)),result_2$i):match((i+1),result_2$i)]))==0){
           background<-summary(c(data[(i+lag):(i+1)]))
           background_pos<-paste((i+lag),":",i,sep="")
-          std<-sd(data[(i+lag):(i+1)])
+          std<-sd(data[(i+lag):(i+1)],na.rm=TRUE)
         }
       }else{
         background<-summary(c(data[manual_bkgd]))
         end_background<-length(manual_bkgd)
         background_pos<-paste((manual_bkgd[1]),":",manual_bkgd[end_background],sep="")
-        std<-sd(data[manual_bkgd])
+        std<-sd(data[manual_bkgd],na.rm=TRUE)
       }
       
       z<-((data[i]-as.numeric(paste(background[4])))/(std))
