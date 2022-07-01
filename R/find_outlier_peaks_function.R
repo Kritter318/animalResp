@@ -3,15 +3,15 @@
 # lag=60
 # z_threshold = 8
 # noisy=FALSE
-# manual_bkgd="none"
-find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",noisy=FALSE){
+# fixed_bkgd="none"
+find_outlier_peaks<-function(data,variable,lag,z_threshold=3,fixed_bkgd="none",noisy=FALSE){
   data<-as.numeric(get(variable,data))
   result<-data.frame("i"=c(seq(1:(lag))),"data"=data[1:(lag)],"signal"=c(rep(0,(lag))),"z"=c(rep(0,(lag))),"bkgd_pos"=c(rep(0,(lag))))
   test<-t.test(data[1:lag],data[((end(data)[1])-lag):end(data)[1]])
   if(noisy == FALSE){
-    if(manual_bkgd[1] == "none"){
+    if(fixed_bkgd[1] == "none"){
       if (test[["p.value"]]<= 0.05){
-        manual_bkgd<-c(1:lag,((end(data)[1])-lag):end(data)[1])
+        fixed_bkgd<-c(1:lag,((end(data)[1])-lag):end(data)[1])
       }
     }
   }
@@ -23,17 +23,17 @@ find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",
       result<-rbind(result,i_result)
       next
     }
-    if (manual_bkgd[1] == "none"){
+    if (fixed_bkgd[1] == "none"){
       if(sum(abs(result$signal[(i-(lag)):(i-1)]))==0){
         background<-summary(c(data[(i-lag):(i-1)]))
         background_pos<-paste((i-lag),":",i,sep="")
         std<-sd(data[(i-lag):(i-1)],na.rm=TRUE)
       }
     }else{
-      background<-summary(c(data[manual_bkgd]))
-      end_background<-length(manual_bkgd)
-      background_pos<-paste((manual_bkgd[1]),":",manual_bkgd[end_background],sep="")
-      std<-sd(data[manual_bkgd],na.rm = TRUE)
+      background<-summary(c(data[fixed_bkgd]))
+      end_background<-length(fixed_bkgd)
+      background_pos<-paste((fixed_bkgd[1]),":",fixed_bkgd[end_background],sep="")
+      std<-sd(data[fixed_bkgd],na.rm = TRUE)
     }
     
     z<-((data[i]-as.numeric(paste(background[4])))/(std))
@@ -60,17 +60,17 @@ find_outlier_peaks<-function(data,variable,lag,z_threshold=3,manual_bkgd="none",
   if (noisy == TRUE){
     result_2<-data.frame("i"=c(rev((length(data)-(lag-1)):(length(data)))),"data"=data[length(data):(length(data)-(lag-1))],"signal"=c(rep(0,(lag))),"z"=c(rep(0,(lag))),"bkgd_pos"=c(rep(0,(lag))))
     for(i in (length(data)-(lag)):1){
-      if (manual_bkgd[1] == "none"){
+      if (fixed_bkgd[1] == "none"){
         if(sum(abs(result_2$signal[match((i+(lag)),result_2$i):match((i+1),result_2$i)]))==0){
           background<-summary(c(data[(i+lag):(i+1)]))
           background_pos<-paste((i+lag),":",i,sep="")
           std<-sd(data[(i+lag):(i+1)],na.rm=TRUE)
         }
       }else{
-        background<-summary(c(data[manual_bkgd]))
-        end_background<-length(manual_bkgd)
-        background_pos<-paste((manual_bkgd[1]),":",manual_bkgd[end_background],sep="")
-        std<-sd(data[manual_bkgd],na.rm=TRUE)
+        background<-summary(c(data[fixed_bkgd]))
+        end_background<-length(fixed_bkgd)
+        background_pos<-paste((fixed_bkgd[1]),":",fixed_bkgd[end_background],sep="")
+        std<-sd(data[fixed_bkgd],na.rm=TRUE)
       }
       
       z<-((data[i]-as.numeric(paste(background[4])))/(std))
