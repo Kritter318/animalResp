@@ -4,7 +4,7 @@
 # z_threshold = 8
 # noisy=FALSE
 # fixed_bkgd="none"
-find_outlier_peaks<-function(data,variable,lag,z_threshold=3,fixed_bkgd="none",noisy=FALSE,plotTitle="Peak start and stop"){
+find_outlier_peaks<-function(data,variable,lag,z_threshold=3,fixed_bkgd="none",noisy=FALSE,plotTitle="Peak start and stop locations"){
   data<-as.numeric(get(variable,data))
   result<-data.frame("i"=c(seq(1:(lag))),"data"=data[1:(lag)],"signal"=c(rep(0,(lag))),"z"=c(rep(0,(lag))),"bkgd_pos"=c(rep(0,(lag))))
   test<-t.test(data[1:lag],data[((end(data)[1])-lag):end(data)[1]])
