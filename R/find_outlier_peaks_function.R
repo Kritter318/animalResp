@@ -142,7 +142,7 @@ find_outlier_peaks<-function(data,variable,lag,z_threshold=3,fixed_bkgd="none",n
       }
 
     }
-    plot1<-plot(data)
+    plot1<-plot(data,main=paste(plotTitle) )
     plot1<-plot1+lines((y=result$signal+as.numeric(paste(background[4]))),x=result$i, col="red")
     #plot1<-labs(title=)
   }
